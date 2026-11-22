@@ -57,4 +57,5 @@
     <string name="batt_text">With the fix on, the GPU composes every frame. On a static screen the difference is negligible, but video and scrolling cost a bit more. That is why “Only for selected apps” is recommended.</string>
     <string name="restricted_title">Accessibility is greyed out?</string>
     <string name="restricted_text">On Android 13+, apps installed from a downloaded APK need: Settings → Apps → Limpid → ⋮ → Allow restricted settings. Or use “Enable automatically” on the main screen once Shizuku is ready.</string>
+    <string name="overlays_unknown">HW overlays state unknown</string>
 </resources>

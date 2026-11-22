@@ -31,6 +31,8 @@ object Controller {
     val state: StateFlow<ShizukuControl.State> = _state
     private val _overlaysDisabled = MutableStateFlow<Boolean?>(null)
     val overlaysDisabled: StateFlow<Boolean?> = _overlaysDisabled
+    private val _lastError = MutableStateFlow<String?>(null)
+    val lastError: StateFlow<String?> = _lastError
 
     private val epoch = MutableStateFlow(0)
     @Volatile private var lastSent: Boolean? = null
@@ -56,6 +58,7 @@ object Controller {
             }.distinctUntilChanged().collect { w ->
                 if (!w.ready || w.disable == lastSent) return@collect
                 val result = ShizukuControl.setOverlaysDisabled(w.disable)
+                _lastError.value = ShizukuControl.lastError
                 if (result != null) {
                     lastSent = w.disable
                     _overlaysDisabled.value = result
@@ -77,7 +80,8 @@ object Controller {
                 epoch.value++
                 if (!ShizukuControl.hasSecureSettings(app)) ShizukuControl.grantSecureSettings(app)
             }
-            _overlaysDisabled.value = ShizukuControl.overlaysDisabled()
+            ShizukuControl.overlaysDisabled()?.let { _overlaysDisabled.value = it }
+            _lastError.value = ShizukuControl.lastError
         } else {
             lastSent = null
             _overlaysDisabled.value = null

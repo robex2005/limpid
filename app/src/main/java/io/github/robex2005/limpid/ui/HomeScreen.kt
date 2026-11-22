@@ -56,6 +56,7 @@ fun HomeScreen(onOpen: (Screen) -> Unit, showSnack: (String) -> Unit) {
     val apps by prefs.apps.collectAsStateWithLifecycle()
     val state by Controller.state.collectAsStateWithLifecycle()
     val disabled by Controller.overlaysDisabled.collectAsStateWithLifecycle()
+    val lastError by Controller.lastError.collectAsStateWithLifecycle()
     var a11y by remember { mutableStateOf(Controller.accessibilityEnabled(ctx)) }
     LaunchedEffect(Unit) { while (true) { a11y = Controller.accessibilityEnabled(ctx); delay(1500) } }
     val msgNotReady = stringResource(R.string.shizuku_not_ready)
@@ -93,10 +94,18 @@ fun HomeScreen(onOpen: (Screen) -> Unit, showSnack: (String) -> Unit) {
                         }
                     )
                 )
-                if (state == State.READY && disabled != null) {
+                if (state == State.READY) {
                     StatusRow(disabled == true,
-                        stringResource(if (disabled == true) R.string.overlays_disabled else R.string.overlays_normal),
+                        stringResource(when (disabled) {
+                            true -> R.string.overlays_disabled
+                            false -> R.string.overlays_normal
+                            null -> R.string.overlays_unknown
+                        }),
                         neutral = disabled != true)
+                    lastError?.let {
+                        Text(it, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.padding(top = 4.dp))
+                    }
                 }
                 when (state) {
                     State.NOT_INSTALLED -> Button(onClick = { ShizukuControl.openShizuku(ctx) },

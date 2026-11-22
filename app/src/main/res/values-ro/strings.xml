@@ -57,4 +57,5 @@
     <string name="batt_text">Cu fixul activ, GPU-ul compune fiecare cadru. Pe ecran static diferența e neglijabilă, dar la video și scroll consumul crește puțin. De aceea e recomandat modul „Doar pentru aplicațiile alese”.</string>
     <string name="restricted_title">Accesibilitatea e gri?</string>
     <string name="restricted_text">Pe Android 13+, aplicațiile instalate dintr-un APK descărcat au nevoie de: Setări → Aplicații → Limpid → ⋮ → Permite setări restricționate. Sau folosește „Activează automat” din ecranul principal, după ce Shizuku e pregătit.</string>
+    <string name="overlays_unknown">Starea suprapunerilor HW necunoscută</string>
 </resources>
