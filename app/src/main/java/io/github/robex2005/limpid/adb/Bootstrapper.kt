@@ -23,6 +23,9 @@ object Bootstrapper {
     private const val ADB_WIFI_ENABLED = "adb_wifi_enabled"
     private val mutex = Mutex()
 
+    /** Connect port typed by the user (Wireless debugging → IP address & port), used if mDNS finds nothing. */
+    @Volatile var manualConnectPort: Int? = null
+
     suspend fun run(context: Context): Result<Unit> = mutex.withLock {
         withContext(Dispatchers.IO) {
             runCatching {
@@ -36,8 +39,11 @@ object Bootstrapper {
 
                 ensureWirelessDebugging(app)
                 val adb = AdbManager.get(app)
-                if (!adb.isConnected && !adb.connectTls(app, 20_000) && !adb.isConnected) {
-                    error("Could not connect to wireless debugging")
+                if (!adb.isConnected) {
+                    val port = AdbDiscovery.findPort(app, AdbDiscovery.CONNECT, 15_000)
+                        ?: manualConnectPort
+                        ?: error("Wireless debugging port not found (mDNS)")
+                    if (!adb.connect("127.0.0.1", port) && !adb.isConnected) error("Could not connect to 127.0.0.1:$port")
                 }
                 try {
                     adb.exec("pm grant ${app.packageName} ${Manifest.permission.WRITE_SECURE_SETTINGS}")

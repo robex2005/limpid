@@ -54,7 +54,6 @@
     <string name="pair_notif_failed">Eșuat: %1$s</string>
     <string name="pair_err_no_service">Dialogul de asociere nu e deschis.</string>
     <string name="pair_err_code">Cod greșit sau dialogul a fost închis.</string>
-    <string name="pair_code_hint">Cod de 6 cifre</string>
     <string name="pair_enter_code">Introdu codul</string>
     <string name="pair_btn">Asociază</string>
     <string name="open_dev_options">Deschide Opțiuni dezvoltator</string>
@@ -81,4 +80,9 @@
     <string name="batt_text">Cu fixul activ, GPU-ul compune fiecare cadru. Pe ecran static diferența e neglijabilă, dar la video și scroll consumul crește puțin. De aceea e recomandat modul „Doar pentru aplicațiile alese”.</string>
     <string name="restricted_title">Accesibilitatea e gri?</string>
     <string name="restricted_text">Pe Android 13+, aplicațiile instalate dintr-un APK descărcat au nevoie de: Setări → Aplicații → Limpid → ⋮ → Permite setări restricționate. Sau folosește „Activează automat” din ecranul principal, după asociere.</string>
+    <string name="pair_notif_ready_port">Serviciul de asociere a fost găsit (port %1$d). Introdu codul de 6 cifre în această notificare.</string>
+    <string name="pair_port_label">Port asociere</string>
+    <string name="connect_port_label">Port conectare (opțional)</string>
+    <string name="pair_split_hint">Samsung închide dialogul de asociere când schimbi aplicația: scrie codul în notificare sau folosește ecranul împărțit. Dacă portul nu e detectat, copiază-l din dialog (Adresa IP și portul), ex. 42965. Portul de conectare e pe ecranul Depanare wireless.</string>
+    <string name="pair_code_hint">Cod (sau port + cod)</string>
 </resources>

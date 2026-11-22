@@ -54,7 +54,6 @@
     <string name="pair_notif_failed">Failed: %1$s</string>
     <string name="pair_err_no_service">The pairing dialog is not open.</string>
     <string name="pair_err_code">Wrong code or the dialog was closed.</string>
-    <string name="pair_code_hint">6-digit code</string>
     <string name="pair_enter_code">Enter code</string>
     <string name="pair_btn">Pair</string>
     <string name="open_dev_options">Open Developer options</string>
@@ -81,4 +80,9 @@
     <string name="batt_text">With the fix on, the GPU composes every frame. On a static screen the difference is negligible, but video and scrolling cost a bit more. That is why “Only for selected apps” is recommended.</string>
     <string name="restricted_title">Accessibility is greyed out?</string>
     <string name="restricted_text">On Android 13+, apps installed from a downloaded APK need: Settings → Apps → Limpid → ⋮ → Allow restricted settings. Or use “Enable automatically” on the main screen after pairing.</string>
+    <string name="pair_notif_ready_port">Pairing service found (port %1$d). Enter the 6-digit code in this notification.</string>
+    <string name="pair_port_label">Pairing port</string>
+    <string name="connect_port_label">Connect port (optional)</string>
+    <string name="pair_split_hint">Samsung closes the pairing dialog when you switch apps: type the code in the notification, or use split screen. If the port is not detected, copy it from the dialog (IP address and port), e.g. 42965. The connect port is on the Wireless debugging screen.</string>
+    <string name="pair_code_hint">Code (or port + code)</string>
 </resources>

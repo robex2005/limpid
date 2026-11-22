@@ -11,7 +11,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
 import androidx.core.app.ServiceCompat
-import io.github.muntashirakon.adb.android.AdbMdns
 import io.github.robex2005.limpid.LimpidApp
 import io.github.robex2005.limpid.R
 import io.github.robex2005.limpid.ui.MainActivity
@@ -38,8 +37,8 @@ sealed interface PairingStatus {
  */
 class PairingService : Service() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private var mdns: AdbMdns? = null
-    @Volatile private var host: String? = null
+    private var mdns: AdbDiscovery? = null
+    @Volatile private var matchedPort = false
     @Volatile private var port: Int = -1
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -60,43 +59,58 @@ class PairingService : Service() {
     private fun start() {
         _status.value = PairingStatus.Searching
         ServiceCompat.startForeground(
-            this, NOTIF_ID, notification(getString(R.string.pair_notif_searching), withInput = false),
+            this, NOTIF_ID, notification(getString(R.string.pair_notif_searching), withInput = true),
             ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
         )
         if (mdns == null) {
-            mdns = AdbMdns(this, AdbMdns.SERVICE_TYPE_TLS_PAIRING) { address, p ->
-                if (address != null && p > 0) {
-                    host = address.hostAddress
+            mdns = AdbDiscovery(this, AdbDiscovery.PAIRING, { p, matched, info ->
+                // Prefer the service whose address is ours; accept another only until ours shows up.
+                if (matched || !matchedPort) {
                     port = p
+                    matchedPort = matchedPort || matched
+                    _port.value = p
+                    _lastSeen.value = info
                     if (_status.value == PairingStatus.Searching || _status.value is PairingStatus.Failed) {
                         _status.value = PairingStatus.Ready
-                        notify(getString(R.string.pair_notif_ready), withInput = true)
+                        notify(getString(R.string.pair_notif_ready_port, p), withInput = true)
                     }
-                } else if (_status.value == PairingStatus.Ready) {
-                    port = -1
-                    _status.value = PairingStatus.Searching
-                    notify(getString(R.string.pair_notif_searching), withInput = false)
                 }
-            }.also { it.start() }
+            }, onLost = {
+                if (_status.value == PairingStatus.Ready) {
+                    port = -1
+                    matchedPort = false
+                    _port.value = null
+                    _status.value = PairingStatus.Searching
+                    notify(getString(R.string.pair_notif_searching), withInput = true)
+                }
+            }).also { it.start() }
         }
     }
 
-    private fun pair(code: String) {
-        val h = host
-        val p = port
-        if (h == null || p <= 0) {
-            _status.value = PairingStatus.Failed(getString(R.string.pair_err_no_service))
+    /** Accepts "123456" or "<port> 123456" / "123456 <port>" (port as shown in the pairing dialog). */
+    private fun pair(input: String) {
+        val nums = Regex("\\d+").findAll(input).map { it.value }.toList()
+        val code = nums.firstOrNull { it.length == 6 }
+        val manualPort = nums.firstOrNull { it != code && it.length in 4..5 }?.toIntOrNull()
+        val p = manualPort ?: port
+        if (code == null) {
+            fail(getString(R.string.pair_err_code))
+            return
+        }
+        if (p <= 0) {
+            fail(getString(R.string.pair_err_no_service))
             return
         }
         _status.value = PairingStatus.Working
         notify(getString(R.string.pair_notif_working), withInput = false)
         scope.launch {
-            val paired = runCatching { AdbManager.get(this@PairingService).pair(h, p, code) }
+            val paired = runCatching { AdbManager.get(this@PairingService).pair("127.0.0.1", p, code) }
             if (paired.getOrNull() != true) {
                 fail(paired.exceptionOrNull()?.message ?: getString(R.string.pair_err_code))
                 return@launch
             }
             mdns?.stop()
+            mdns = null
             LimpidApp.prefs.setPaired(true)
             val boot = Bootstrapper.run(this@PairingService)
             if (boot.isSuccess) {
@@ -114,7 +128,7 @@ class PairingService : Service() {
 
     private fun fail(msg: String) {
         _status.value = PairingStatus.Failed(msg)
-        notify(getString(R.string.pair_notif_failed, msg), withInput = port > 0)
+        notify(getString(R.string.pair_notif_failed, msg), withInput = true)
     }
 
     private fun stopAll() {
@@ -177,6 +191,10 @@ class PairingService : Service() {
         private const val NOTIF_ID = 1
         private const val NOTIF_DONE_ID = 2
 
+        private val _port = MutableStateFlow<Int?>(null)
+        val port: StateFlow<Int?> = _port
+        private val _lastSeen = MutableStateFlow<String?>(null)
+        val lastSeen: StateFlow<String?> = _lastSeen
         private val _status = MutableStateFlow<PairingStatus>(PairingStatus.Idle)
         val status: StateFlow<PairingStatus> = _status
 

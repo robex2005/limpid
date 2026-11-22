@@ -50,6 +50,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.robex2005.limpid.BuildConfig
 import io.github.robex2005.limpid.LimpidApp
 import io.github.robex2005.limpid.R
+import io.github.robex2005.limpid.adb.Bootstrapper
 import io.github.robex2005.limpid.adb.PairingService
 import io.github.robex2005.limpid.adb.PairingStatus
 import io.github.robex2005.limpid.core.Controller
@@ -64,6 +65,10 @@ fun InfoScreen(showSnack: (String) -> Unit) {
     val helperUp by Controller.helperUp.collectAsStateWithLifecycle()
     val autoOff by prefs.autoDisableWifiDebug.collectAsStateWithLifecycle()
     var code by remember { mutableStateOf("") }
+    val foundPort by PairingService.port.collectAsStateWithLifecycle()
+    val lastSeen by PairingService.lastSeen.collectAsStateWithLifecycle()
+    var pairPort by remember { mutableStateOf("") }
+    var connectPort by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
     val notifPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -108,9 +113,33 @@ fun InfoScreen(showSnack: (String) -> Unit) {
                             modifier = Modifier.fillMaxWidth()
                         )
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            OutlinedTextField(
+                                value = pairPort, onValueChange = { v -> pairPort = v.filter { it.isDigit() }.take(5) },
+                                singleLine = true, label = { Text(stringResource(R.string.pair_port_label)) },
+                                placeholder = { Text(foundPort?.toString() ?: "") },
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                modifier = Modifier.weight(1f)
+                            )
+                            OutlinedTextField(
+                                value = connectPort, onValueChange = { v -> connectPort = v.filter { it.isDigit() }.take(5) },
+                                singleLine = true, label = { Text(stringResource(R.string.connect_port_label)) },
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                        Text(stringResource(R.string.pair_split_hint), style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        lastSeen?.let {
+                            Text("mDNS: $it", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.outline)
+                        }
+                        val portForPair = pairPort.toIntOrNull() ?: foundPort
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Button(
-                                onClick = { PairingService.submitCode(ctx, code) },
-                                enabled = code.length == 6 && status == PairingStatus.Ready || status is PairingStatus.Failed && code.length == 6,
+                                onClick = {
+                                    Bootstrapper.manualConnectPort = connectPort.toIntOrNull()
+                                    PairingService.submitCode(ctx, "${portForPair ?: ""} $code")
+                                },
+                                enabled = code.length == 6 && portForPair != null && status != PairingStatus.Working,
                                 modifier = Modifier.weight(1f)
                             ) { Text(stringResource(R.string.pair_btn)) }
                             OutlinedButton(onClick = { PairingService.stop(ctx) }) { Text(stringResource(R.string.cancel)) }
