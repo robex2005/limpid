@@ -38,7 +38,9 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import io.github.robex2005.limpid.R
 import io.github.robex2005.limpid.core.Controller
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.launch
 
 enum class Screen { HOME, APPS, INFO }
@@ -63,7 +65,7 @@ fun LimpidRoot() {
     LaunchedEffect(Unit) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
             while (true) {
-                Controller.refresh()
+                withContext(Dispatchers.IO) { Controller.refresh() }
                 delay(2000)
             }
         }
@@ -101,7 +103,7 @@ fun LimpidRoot() {
             when (screen) {
                 Screen.HOME -> HomeScreen(onOpen = { screen = it }, showSnack = showSnack)
                 Screen.APPS -> AppsScreen()
-                Screen.INFO -> InfoScreen(showSnack = showSnack)
+                Screen.INFO -> InfoScreen()
             }
         }
     }

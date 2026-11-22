@@ -1,10 +1,13 @@
 package io.github.robex2005.limpid.ui
 
+import android.content.Intent
+import android.provider.Settings
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,7 +31,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,15 +40,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import android.content.Intent
-import android.provider.Settings
 import io.github.robex2005.limpid.LimpidApp
 import io.github.robex2005.limpid.R
-import io.github.robex2005.limpid.adb.Bootstrapper
+import io.github.robex2005.limpid.backend.ShizukuControl
+import io.github.robex2005.limpid.backend.ShizukuControl.State
 import io.github.robex2005.limpid.core.Controller
 import io.github.robex2005.limpid.core.Mode
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(onOpen: (Screen) -> Unit, showSnack: (String) -> Unit) {
@@ -54,34 +54,15 @@ fun HomeScreen(onOpen: (Screen) -> Unit, showSnack: (String) -> Unit) {
     val prefs = LimpidApp.prefs
     val mode by prefs.mode.collectAsStateWithLifecycle()
     val apps by prefs.apps.collectAsStateWithLifecycle()
-    val paired by prefs.paired.collectAsStateWithLifecycle()
-    val backend by prefs.backend.collectAsStateWithLifecycle()
-    val helperUp by Controller.helperUp.collectAsStateWithLifecycle()
+    val state by Controller.state.collectAsStateWithLifecycle()
     val disabled by Controller.overlaysDisabled.collectAsStateWithLifecycle()
-    val scope = rememberCoroutineScope()
-    var connecting by remember { mutableStateOf(false) }
     var a11y by remember { mutableStateOf(Controller.accessibilityEnabled(ctx)) }
     LaunchedEffect(Unit) { while (true) { a11y = Controller.accessibilityEnabled(ctx); delay(1500) } }
-
-    val msgConnecting = stringResource(R.string.connecting)
-    val msgNeedSetup = stringResource(R.string.need_setup)
-    val msgConnectFailed = stringResource(R.string.connect_failed)
-
-    fun startHelper() {
-        if (connecting) return
-        connecting = true
-        showSnack(msgConnecting)
-        scope.launch {
-            val r = Bootstrapper.run(ctx)
-            connecting = false
-            if (r.isFailure) showSnack(msgConnectFailed + " " + (r.exceptionOrNull()?.message ?: ""))
-        }
-    }
+    val msgNotReady = stringResource(R.string.shizuku_not_ready)
 
     fun choose(m: Mode) {
-        if (m != Mode.OFF && !paired) { showSnack(msgNeedSetup); onOpen(Screen.INFO); return }
         prefs.setMode(m)
-        if (m != Mode.OFF && !helperUp) startHelper()
+        if (m != Mode.OFF && state != State.READY) showSnack(msgNotReady)
     }
 
     Column(
@@ -101,25 +82,30 @@ fun HomeScreen(onOpen: (Screen) -> Unit, showSnack: (String) -> Unit) {
                     style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(vertical = 4.dp)
                 )
-                StatusRow(paired, stringResource(
-                    when {
-                        !paired -> R.string.adb_no
-                        backend == io.github.robex2005.limpid.core.Backend.SHIZUKU -> R.string.via_shizuku
-                        else -> R.string.adb_ok
-                    }
-                ))
-                StatusRow(helperUp, stringResource(if (helperUp) R.string.helper_ok else R.string.helper_no))
-                if (helperUp && disabled != null) {
-                    StatusRow(disabled == true, stringResource(if (disabled == true) R.string.overlays_disabled else R.string.overlays_normal), neutral = disabled != true)
+                StatusRow(
+                    state == State.READY,
+                    stringResource(
+                        when (state) {
+                            State.NOT_INSTALLED -> R.string.shizuku_state_not_installed
+                            State.NOT_RUNNING -> R.string.shizuku_state_not_running
+                            State.NO_PERMISSION -> R.string.shizuku_state_no_permission
+                            State.READY -> R.string.shizuku_state_ready
+                        }
+                    )
+                )
+                if (state == State.READY && disabled != null) {
+                    StatusRow(disabled == true,
+                        stringResource(if (disabled == true) R.string.overlays_disabled else R.string.overlays_normal),
+                        neutral = disabled != true)
                 }
-                if (!paired) {
-                    Button(onClick = { onOpen(Screen.INFO) }, Modifier.fillMaxWidth().padding(top = 10.dp)) {
-                        Text(stringResource(R.string.setup))
-                    }
-                } else if (!helperUp && mode != Mode.OFF) {
-                    Button(onClick = { startHelper() }, enabled = !connecting, modifier = Modifier.fillMaxWidth().padding(top = 10.dp)) {
-                        Text(stringResource(R.string.start_service))
-                    }
+                when (state) {
+                    State.NOT_INSTALLED -> Button(onClick = { ShizukuControl.openShizuku(ctx) },
+                        Modifier.fillMaxWidth().padding(top = 10.dp)) { Text(stringResource(R.string.shizuku_install)) }
+                    State.NOT_RUNNING -> Button(onClick = { ShizukuControl.openShizuku(ctx) },
+                        Modifier.fillMaxWidth().padding(top = 10.dp)) { Text(stringResource(R.string.shizuku_open)) }
+                    State.NO_PERMISSION -> Button(onClick = { ShizukuControl.requestPermission() },
+                        Modifier.fillMaxWidth().padding(top = 10.dp)) { Text(stringResource(R.string.shizuku_allow)) }
+                    State.READY -> Unit
                 }
             }
         }
@@ -140,7 +126,7 @@ fun HomeScreen(onOpen: (Screen) -> Unit, showSnack: (String) -> Unit) {
                 Column(Modifier.padding(14.dp)) {
                     Text(stringResource(R.string.a11y_off), color = MaterialTheme.colorScheme.onErrorContainer)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        if (Bootstrapper.hasSecureSettings(ctx)) {
+                        if (state == State.READY || ShizukuControl.hasSecureSettings(ctx)) {
                             TextButton(onClick = { a11y = Controller.enableAccessibility(ctx) }) { Text(stringResource(R.string.a11y_auto)) }
                         }
                         TextButton(onClick = {
@@ -177,7 +163,7 @@ private fun ModeButton(title: String, desc: String, glyph: String, selected: Boo
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(if (selected) 2.dp else 1.dp, if (selected) accent else cs.outlineVariant),
         modifier = Modifier.fillMaxWidth(),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp)
+        contentPadding = PaddingValues(16.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             Box(

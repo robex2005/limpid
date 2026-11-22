@@ -7,8 +7,8 @@ Pe unele telefoane Samsung cu One UI, aplicații precum Facebook redau videoclip
 <li><b>Dezactivare</b> – revine la comportamentul normal al sistemului.</li>
 </ul>
 
-<b>Fără root, fără Shizuku.</b> Limpid se asociază o singură dată cu <i>Depanarea wireless</i> a telefonului (Android 11+), apoi pornește un mic helper care rulează ca utilizator shell și poate face un singur lucru: comutarea acelui flag de depanare din SurfaceFlinger. Helper-ul merge și pe date mobile până la repornire. După repornire, Limpid îl pornește automat imediat ce ești pe Wi-Fi.
+<b>Necesită Shizuku</b> (fără root). Limpid trimite prin Shizuku aceeași comandă către SurfaceFlinger pe care o folosește comutatorul din Opțiuni dezvoltator și nu are serviciu propriu în fundal. După repornire, Shizuku trezește Limpid, iar modul salvat se reaplică.
 
-<b>Confidențialitate:</b> fără acces la internet în afara dispozitivului, fără analiză, fără reclame. Serviciul de accesibilitate e folosit doar ca să afle ce aplicație e în prim-plan (pentru modul pe aplicații); nu citește conținutul ecranului.
+<b>Confidențialitate:</b> fără permisiune de internet, fără analiză, fără reclame. Serviciul de accesibilitate e folosit doar ca să afle ce aplicație e în prim-plan (pentru modul pe aplicații); nu citește conținutul ecranului.
 
 Disponibil în română și engleză.

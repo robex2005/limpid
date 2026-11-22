@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="channel_setup">Configurare și asociere</string>
     <string name="back">Înapoi</string>
-    <string name="cancel">Anulează</string>
     <string name="lang_system">Limba sistemului</string>
 
     <string name="status">Stare</string>
     <string name="mode_off">Dezactivat</string>
     <string name="mode_global">Activ global</string>
     <string name="mode_apps">Doar aplicații selectate</string>
-    <string name="adb_ok">Depanare wireless asociată</string>
-    <string name="adb_no">Depanare wireless neconfigurată</string>
-    <string name="helper_ok">Serviciu Limpid pornit</string>
-    <string name="helper_no">Serviciu Limpid oprit</string>
     <string name="overlays_disabled">Suprapuneri HW dezactivate acum</string>
     <string name="overlays_normal">Suprapuneri HW normale acum</string>
-    <string name="setup">Configurează depanarea wireless</string>
-    <string name="start_service">Pornește serviciul</string>
-    <string name="connecting">Mă conectez la depanarea wireless…</string>
-    <string name="connect_failed">Serviciul nu a putut porni. Verifică dacă ești pe Wi-Fi.</string>
-    <string name="need_setup">Configurează mai întâi depanarea wireless.</string>
+
+    <string name="shizuku_state_not_installed">Shizuku nu e instalat</string>
+    <string name="shizuku_state_not_running">Shizuku nu rulează</string>
+    <string name="shizuku_state_no_permission">Shizuku rulează, e nevoie de permisiune</string>
+    <string name="shizuku_state_ready">Shizuku pregătit</string>
+    <string name="shizuku_install">Descarcă Shizuku</string>
+    <string name="shizuku_open">Deschide Shizuku</string>
+    <string name="shizuku_allow">Permite Limpid în Shizuku</string>
+    <string name="shizuku_not_ready">Salvat. Se aplică imediat ce Shizuku rulează și Limpid are permisiune.</string>
 
     <string name="g_title">Activare globală</string>
     <string name="g_desc">Suprapunerile HW rămân dezactivate peste tot până la repornire.</string>
@@ -42,56 +40,21 @@
     <string name="search">Caută aplicații…</string>
     <string name="info_title">Informații</string>
 
-    <string name="pair_title">Asociere depanare wireless</string>
-    <string name="pair_state_idle">Pas unic. Apasă Pornește, apoi deschide Depanare wireless → Asociază dispozitivul cu un cod de asociere.</string>
-    <string name="pair_state_paired">Deja asociat. Asociază din nou doar dacă ai revocat autorizările de depanare.</string>
-    <string name="pair_start">Pornește asocierea</string>
-    <string name="pair_again">Asociază din nou</string>
-    <string name="pair_notif_searching">Aștept dialogul de asociere… Deschide Opțiuni dezvoltator → Depanare wireless → Asociază dispozitivul cu un cod de asociere.</string>
-    <string name="pair_notif_ready">Serviciul de asociere a fost găsit. Introdu codul de 6 cifre aici sau în notificare.</string>
-    <string name="pair_notif_working">Asociez și pornesc serviciul Limpid…</string>
-    <string name="pair_notif_done">Gata. Limpid e asociat și serviciul rulează.</string>
-    <string name="pair_notif_failed">Eșuat: %1$s</string>
-    <string name="pair_err_no_service">Dialogul de asociere nu e deschis.</string>
-    <string name="pair_err_code">Cod greșit sau dialogul a fost închis.</string>
-    <string name="pair_enter_code">Introdu codul</string>
-    <string name="pair_btn">Asociază</string>
-    <string name="open_dev_options">Deschide Opțiuni dezvoltator</string>
-
-    <string name="how_title">Cum activezi depanarea wireless</string>
+    <string name="how_title">Configurare (o singură dată)</string>
     <string-array name="steps">
-        <item>Setări → Despre telefon → Informații software → apasă de 7 ori pe Număr versiune.</item>
-        <item>Apasă Pornește asocierea de mai sus, apoi Setări → Opțiuni dezvoltator și activează Depanare wireless (e nevoie de Wi-Fi).</item>
-        <item>Atinge Depanare wireless → Asociază dispozitivul cu un cod de asociere.</item>
-        <item>Scrie codul de 6 cifre în notificarea Limpid fără să închizi dialogul (sau folosește ecranul împărțit și scrie-l aici).</item>
-        <item>Gata. Limpid își acordă singur permisiunile necesare și pornește serviciul.</item>
+        <item>Instalează Shizuku (F-Droid, GitHub sau Google Play).</item>
+        <item>Activează Opțiunile dezvoltator: Setări → Despre telefon → Informații software → apasă de 7 ori pe Număr versiune.</item>
+        <item>În Shizuku: Pornire prin depanare wireless → Asociere. Samsung închide dialogul de asociere când schimbi aplicația, așa că folosește ecranul împărțit sau notificarea Shizuku pentru cod.</item>
+        <item>În setările Shizuku, activează Pornire la boot, ca să repornească singur după restart, pe Wi-Fi.</item>
+        <item>Înapoi în Limpid: Permite Limpid în Shizuku, apoi alege un mod.</item>
     </string-array>
-    <string name="note_reboot">După repornire, Limpid reactivează singur depanarea wireless și repornește serviciul imediat ce ești pe Wi-Fi. Odată pornit, merge și pe date mobile până la următoarea repornire.</string>
-
-    <string name="settings_title">Setări</string>
-    <string name="auto_off_title">Oprește depanarea wireless după pornire</string>
-    <string name="auto_off_desc">Mai sigur: serviciul rămâne activ, dar nimic din rețea nu se mai poate conecta la ADB.</string>
-    <string name="battery_btn">Permite rularea în fundal (baterie)</string>
-    <string name="stop_service">Oprește serviciul Limpid</string>
+    <string name="open_dev_options">Deschide Opțiuni dezvoltator</string>
+    <string name="note_reboot">După repornire, setarea se resetează. Imediat ce Shizuku rulează din nou, pornește Limpid, iar modul salvat se aplică automat. Nu trebuie să faci nimic.</string>
 
     <string name="why_title">De ce e nevoie de asta?</string>
     <string name="why_text">Pe unele telefoane Samsung cu One UI, aplicații precum Facebook redau videoclipurile cu un filtru gri, spălăcit, când ecranul e compus de controllerul de afișare (suprapuneri hardware). Imaginea devine corectă imediat ce apare un overlay de sistem, de exemplu panoul de volum. Dezactivarea suprapunerilor HW mută compunerea pe GPU, iar culorile sunt mereu corecte. E același comutator ca Opțiuni dezvoltator → Dezactivare suprapuneri HW, dar aplicat automat.</string>
     <string name="batt_title">Consum baterie</string>
     <string name="batt_text">Cu fixul activ, GPU-ul compune fiecare cadru. Pe ecran static diferența e neglijabilă, dar la video și scroll consumul crește puțin. De aceea e recomandat modul „Doar pentru aplicațiile alese”.</string>
     <string name="restricted_title">Accesibilitatea e gri?</string>
-    <string name="restricted_text">Pe Android 13+, aplicațiile instalate dintr-un APK descărcat au nevoie de: Setări → Aplicații → Limpid → ⋮ → Permite setări restricționate. Sau folosește „Activează automat” din ecranul principal, după asociere.</string>
-    <string name="pair_notif_ready_port">Serviciul de asociere a fost găsit (port %1$d). Introdu codul de 6 cifre în această notificare.</string>
-    <string name="pair_port_label">Port asociere</string>
-    <string name="connect_port_label">Port conectare (opțional)</string>
-    <string name="pair_split_hint">Samsung închide dialogul de asociere când schimbi aplicația: scrie codul în notificare sau folosește ecranul împărțit. Dacă portul nu e detectat, copiază-l din dialog (Adresa IP și portul), ex. 42965. Portul de conectare e pe ecranul Depanare wireless.</string>
-    <string name="pair_code_hint">Cod (sau port + cod)</string>
-    <string name="shizuku_title">Alternativ: Shizuku</string>
-    <string name="shizuku_not_running">Dacă asocierea integrată nu merge pe telefonul tău, instalează și pornește Shizuku, apoi revino aici.</string>
-    <string name="shizuku_no_permission">Shizuku rulează. Apasă butonul și permite accesul pentru Limpid.</string>
-    <string name="shizuku_ready">Shizuku rulează și Limpid are permisiune.</string>
-    <string name="shizuku_active">Limpid folosește Shizuku ca să pornească serviciul. După repornire, Shizuku trebuie să ruleze (poate porni singur pe Wi-Fi).</string>
-    <string name="shizuku_use">Folosește Shizuku</string>
-    <string name="shizuku_back_to_adb">Revino la asocierea integrată</string>
-    <string name="shizuku_done">Gata. Serviciul a pornit prin Shizuku.</string>
-    <string name="via_shizuku">Conectat prin Shizuku</string>
+    <string name="restricted_text">Pe Android 13+, aplicațiile instalate dintr-un APK descărcat au nevoie de: Setări → Aplicații → Limpid → ⋮ → Permite setări restricționate. Sau folosește „Activează automat” din ecranul principal, după ce Shizuku e pregătit.</string>
 </resources>

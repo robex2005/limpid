@@ -2,20 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Local sockets: ADB over wireless debugging and the 127.0.0.1 helper. Nothing leaves the device. -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-    <!-- Granted by Limpid itself over ADB during setup; used to re-enable wireless debugging after reboot. -->
+    <!-- Granted through Shizuku; lets Limpid enable its own accessibility service. -->
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" tools:ignore="ProtectedPermissions" />
 
     <queries>
+        <package android:name="moe.shizuku.privileged.api" />
         <intent>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
@@ -45,15 +36,6 @@
         </activity>
 
         <service
-            android:name=".adb.PairingService"
-            android:exported="false"
-            android:foregroundServiceType="specialUse">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="Pairing with the device's own wireless debugging (ADB) while the user enters the code" />
-        </service>
-
-        <service
             android:name=".service.ForegroundAppService"
             android:exported="true"
             android:label="@string/app_name"
@@ -66,16 +48,7 @@
                 android:resource="@xml/accessibility_config" />
         </service>
 
-        <receiver
-            android:name=".work.BootReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-            </intent-filter>
-        </receiver>
-
-        <!-- Shizuku delivers its binder through this provider (optional backend) -->
+        <!-- Shizuku delivers its binder (and wakes Limpid after a reboot) through this provider -->
         <provider
             android:name="rikka.shizuku.ShizukuProvider"
             android:authorities="${applicationId}.shizuku"

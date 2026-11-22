@@ -1,3 +1,3 @@
--keep class io.github.robex2005.limpid.helper.HelperMain { *; }
--dontwarn org.bouncycastle.**
--dontwarn org.conscrypt.**
+# Shizuku.newProcess is called by reflection
+-keepclassmembers class rikka.shizuku.Shizuku { private static *** newProcess(...); }
+-keep class rikka.shizuku.** { *; }

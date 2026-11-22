@@ -1,7 +1,7 @@
 <p align="center"><img src="docs/icon.svg" width="112" alt="Limpid icon"></p>
 
 <h1 align="center">Limpid</h1>
-<p align="center">Fix gray, washed-out videos on Samsung One UI by toggling <b>Disable HW overlays</b> automatically. No root, no Shizuku.</p>
+<p align="center">Fix gray, washed-out videos on Samsung One UI by toggling <b>Disable HW overlays</b> automatically, through <a href="https://shizuku.rikka.app/">Shizuku</a>. No root.</p>
 
 🇷🇴 [Română mai jos](#română)
 
@@ -19,20 +19,23 @@ On some Samsung phones running One UI, apps like Facebook play videos with a gra
 
 ## How it works
 
-1. **Built-in ADB client** ([libadb-android](https://github.com/MuntashirAkon/libadb-android)) pairs once with the phone's own *Wireless debugging* (Android 11+), using a code typed into a notification.
-2. Over that connection it grants itself `WRITE_SECURE_SETTINGS` and starts a **helper** with `app_process`, running as `shell` (uid 2000), detached from ADB.
-3. The helper listens on `127.0.0.1` only, requires a per-install secret token, and exposes a single operation: SurfaceFlinger transaction `1008` (the same call the Developer options switch makes).
-4. An **accessibility service** reports the focused application window (event-driven, no polling, ignores system overlays) for the per-app mode.
-5. After a **reboot**, Limpid re-enables wireless debugging through `WRITE_SECURE_SETTINGS`, reconnects with the already-paired key as soon as the phone is on Wi-Fi, and restarts the helper. Once running, it works on mobile data until the next reboot.
-6. Optionally (default on) it turns wireless debugging off again once the helper is running.
-7. **Shizuku fallback:** if built-in pairing does not work on a given phone, Limpid can start the same helper through [Shizuku](https://shizuku.rikka.app/) instead.
+- Limpid calls SurfaceFlinger transaction `1008` (the same call the Developer options switch makes) through **Shizuku**, which runs as shell. There is no background service of its own.
+- An **accessibility service** reports the focused application window for the per-app mode: event-driven, no polling, and it ignores system overlays like the volume panel or the keyboard.
+- After a **reboot**, Shizuku (with *Start on boot*) wakes Limpid through its provider and the saved mode is applied again.
+- Through Shizuku, Limpid grants itself `WRITE_SECURE_SETTINGS` so it can enable its own accessibility service (*Enable automatically*).
+
+## Setup
+
+1. Install [Shizuku](https://shizuku.rikka.app/download/) and start it via *Wireless debugging*. On Samsung the pairing dialog closes when you switch apps: use split screen or Shizuku's notification for the code.
+2. In Shizuku, enable *Start on boot*.
+3. In Limpid, tap *Allow Limpid in Shizuku* and pick a mode.
 
 ## Install
 
 - **Test builds:** [Releases → nightly](https://github.com/robex2005/limpid/releases/tag/nightly), built by GitHub Actions from `main` and signed with a public test key. Uninstall before installing another signed build.
 - **F-Droid:** submission in progress.
 
-On Android 13+, an APK installed from a browser may need *Settings → Apps → Limpid → ⋮ → Allow restricted settings* before you can enable the accessibility service manually. After pairing, *Enable automatically* on the main screen does it for you.
+On Android 13+, Google Play Protect may block a downloaded APK that declares an accessibility service. Install with `adb install`, or pause Play Protect scanning during the install.
 
 ## Build
 
@@ -40,11 +43,11 @@ On Android 13+, an APK installed from a browser may need *Settings → Apps → 
 ./gradlew assembleDebug     # or assembleRelease (unsigned)
 ```
 
-Requirements: JDK 17, Android SDK 35. `minSdk` 30.
+JDK 17, Android SDK 35, `minSdk` 30.
 
 ## Privacy
 
-No analytics, no ads, no network access beyond the device itself (local ADB and the loopback helper). The accessibility service reads only the package name of the focused app.
+No internet permission, no analytics, no ads. The accessibility service reads only the package name of the focused app.
 
 ## License
 
@@ -54,11 +57,9 @@ GPL-3.0-or-later
 
 ## Română
 
-**Limpid** elimină filtrul gri din videoclipuri pe telefoanele Samsung cu One UI, aplicând automat *Opțiuni dezvoltator → Dezactivare suprapuneri HW*: global, doar pentru aplicațiile alese, sau deloc. Funcționează fără root și fără Shizuku.
+**Limpid** elimină filtrul gri din videoclipuri pe telefoanele Samsung cu One UI, aplicând automat *Opțiuni dezvoltator → Dezactivare suprapuneri HW* prin **Shizuku**: global, doar pentru aplicațiile alese, sau deloc. Fără root.
 
-- Asociere unică cu **Depanarea wireless** (Android 11+), cu codul introdus direct în notificare.
-- Un helper minim rulează ca `shell` și poate face un singur lucru: comutarea flag-ului din SurfaceFlinger. Merge și pe date mobile, până la repornire.
-- După repornire, Limpid repornește singur depanarea wireless și helper-ul imediat ce telefonul e pe Wi-Fi.
+- Comanda către SurfaceFlinger e trimisă prin Shizuku; aplicația nu are serviciu propriu în fundal.
 - Modul pe aplicații folosește un serviciu de accesibilitate care citește doar numele aplicației din prim-plan.
-- Alternativ, dacă asocierea integrată nu merge, helper-ul poate fi pornit prin Shizuku.
+- După repornire, Shizuku (cu *Pornire la boot*) trezește Limpid, iar modul salvat se reaplică automat.
 - Interfață în română și engleză.

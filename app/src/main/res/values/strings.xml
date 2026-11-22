@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Limpid</string>
-    <string name="channel_setup">Setup and pairing</string>
     <string name="back">Back</string>
-    <string name="cancel">Cancel</string>
     <string name="lang_system">System language</string>
 
     <string name="status">Status</string>
     <string name="mode_off">Off</string>
     <string name="mode_global">Active globally</string>
     <string name="mode_apps">Selected apps only</string>
-    <string name="adb_ok">Wireless debugging paired</string>
-    <string name="adb_no">Wireless debugging not set up</string>
-    <string name="helper_ok">Limpid service running</string>
-    <string name="helper_no">Limpid service stopped</string>
     <string name="overlays_disabled">HW overlays disabled now</string>
     <string name="overlays_normal">HW overlays normal now</string>
-    <string name="setup">Set up wireless debugging</string>
-    <string name="start_service">Start service</string>
-    <string name="connecting">Connecting to wireless debugging…</string>
-    <string name="connect_failed">Could not start the service. Make sure you are on Wi-Fi.</string>
-    <string name="need_setup">Set up wireless debugging first.</string>
+
+    <string name="shizuku_state_not_installed">Shizuku is not installed</string>
+    <string name="shizuku_state_not_running">Shizuku is not running</string>
+    <string name="shizuku_state_no_permission">Shizuku is running, permission needed</string>
+    <string name="shizuku_state_ready">Shizuku ready</string>
+    <string name="shizuku_install">Get Shizuku</string>
+    <string name="shizuku_open">Open Shizuku</string>
+    <string name="shizuku_allow">Allow Limpid in Shizuku</string>
+    <string name="shizuku_not_ready">Saved. It will apply as soon as Shizuku is running and Limpid is allowed.</string>
 
     <string name="g_title">Enable globally</string>
     <string name="g_desc">HW overlays stay disabled everywhere until reboot.</string>
@@ -42,56 +40,21 @@
     <string name="search">Search apps…</string>
     <string name="info_title">Info</string>
 
-    <string name="pair_title">Wireless debugging pairing</string>
-    <string name="pair_state_idle">One-time step. Tap Start, then open Wireless debugging → Pair device with pairing code.</string>
-    <string name="pair_state_paired">Already paired. Pair again only if you revoked debugging authorizations.</string>
-    <string name="pair_start">Start pairing</string>
-    <string name="pair_again">Pair again</string>
-    <string name="pair_notif_searching">Waiting for the pairing dialog… Open Developer options → Wireless debugging → Pair device with pairing code.</string>
-    <string name="pair_notif_ready">Pairing service found. Enter the 6-digit code here or in the notification.</string>
-    <string name="pair_notif_working">Pairing and starting the Limpid service…</string>
-    <string name="pair_notif_done">Done. Limpid is paired and its service is running.</string>
-    <string name="pair_notif_failed">Failed: %1$s</string>
-    <string name="pair_err_no_service">The pairing dialog is not open.</string>
-    <string name="pair_err_code">Wrong code or the dialog was closed.</string>
-    <string name="pair_enter_code">Enter code</string>
-    <string name="pair_btn">Pair</string>
-    <string name="open_dev_options">Open Developer options</string>
-
-    <string name="how_title">How to enable wireless debugging</string>
+    <string name="how_title">Setup (one time)</string>
     <string-array name="steps">
-        <item>Settings → About phone → Software information → tap Build number 7 times.</item>
-        <item>Tap Start pairing above, then go to Settings → Developer options and turn on Wireless debugging (Wi-Fi required).</item>
-        <item>Tap Wireless debugging → Pair device with pairing code.</item>
-        <item>Type the 6-digit code into the Limpid notification without leaving the dialog (or use split screen and type it here).</item>
-        <item>Done. Limpid grants itself the permissions it needs and starts its service.</item>
+        <item>Install Shizuku (F-Droid, GitHub or Google Play).</item>
+        <item>Enable Developer options: Settings → About phone → Software information → tap Build number 7 times.</item>
+        <item>In Shizuku: Start via Wireless debugging → Pairing. Samsung closes the pairing dialog when you switch apps, so use split screen or Shizuku\'s notification to type the code.</item>
+        <item>In Shizuku settings, turn on Start on boot, so it comes back after a reboot while on Wi-Fi.</item>
+        <item>Back in Limpid: Allow Limpid in Shizuku, then pick a mode.</item>
     </string-array>
-    <string name="note_reboot">After a reboot, Limpid turns wireless debugging back on and restarts its service by itself as soon as you are on Wi-Fi. Once started, it keeps working on mobile data until the next reboot.</string>
-
-    <string name="settings_title">Settings</string>
-    <string name="auto_off_title">Turn off wireless debugging after start</string>
-    <string name="auto_off_desc">Safer: the service keeps running, but nothing on the network can connect to ADB.</string>
-    <string name="battery_btn">Allow running in background (battery)</string>
-    <string name="stop_service">Stop Limpid service</string>
+    <string name="open_dev_options">Open Developer options</string>
+    <string name="note_reboot">After a reboot the flag resets. As soon as Shizuku is running again, it wakes Limpid up and the saved mode is applied automatically. No other action is needed.</string>
 
     <string name="why_title">Why is this needed?</string>
     <string name="why_text">On some Samsung phones with One UI, apps like Facebook play videos with a gray, washed-out haze when the display controller composes the screen (hardware overlays). The video looks right as soon as any system overlay appears, like the volume panel. Disabling HW overlays moves composition to the GPU, so colors are always correct. It is the same switch as Developer options → Disable HW overlays, but applied automatically.</string>
     <string name="batt_title">Battery use</string>
     <string name="batt_text">With the fix on, the GPU composes every frame. On a static screen the difference is negligible, but video and scrolling cost a bit more. That is why “Only for selected apps” is recommended.</string>
     <string name="restricted_title">Accessibility is greyed out?</string>
-    <string name="restricted_text">On Android 13+, apps installed from a downloaded APK need: Settings → Apps → Limpid → ⋮ → Allow restricted settings. Or use “Enable automatically” on the main screen after pairing.</string>
-    <string name="pair_notif_ready_port">Pairing service found (port %1$d). Enter the 6-digit code in this notification.</string>
-    <string name="pair_port_label">Pairing port</string>
-    <string name="connect_port_label">Connect port (optional)</string>
-    <string name="pair_split_hint">Samsung closes the pairing dialog when you switch apps: type the code in the notification, or use split screen. If the port is not detected, copy it from the dialog (IP address and port), e.g. 42965. The connect port is on the Wireless debugging screen.</string>
-    <string name="pair_code_hint">Code (or port + code)</string>
-    <string name="shizuku_title">Alternative: Shizuku</string>
-    <string name="shizuku_not_running">If built-in pairing does not work on your phone, install and start Shizuku, then come back here.</string>
-    <string name="shizuku_no_permission">Shizuku is running. Tap the button and allow Limpid.</string>
-    <string name="shizuku_ready">Shizuku is running and Limpid has permission.</string>
-    <string name="shizuku_active">Limpid uses Shizuku to start its service. After a reboot, Shizuku must be running (it can start itself on Wi-Fi).</string>
-    <string name="shizuku_use">Use Shizuku</string>
-    <string name="shizuku_back_to_adb">Switch back to built-in pairing</string>
-    <string name="shizuku_done">Done. Service started through Shizuku.</string>
-    <string name="via_shizuku">Connected through Shizuku</string>
+    <string name="restricted_text">On Android 13+, apps installed from a downloaded APK need: Settings → Apps → Limpid → ⋮ → Allow restricted settings. Or use “Enable automatically” on the main screen once Shizuku is ready.</string>
 </resources>

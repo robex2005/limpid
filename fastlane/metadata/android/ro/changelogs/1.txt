@@ -1,1 +1,1 @@
-Prima versiune: moduri global, pe aplicații și oprit; asociere integrată cu depanarea wireless; repornire automată după restart pe Wi-Fi; română și engleză.
+Prima versiune: moduri global, pe aplicații și oprit, prin Shizuku; reaplicare automată după repornire; română și engleză.
