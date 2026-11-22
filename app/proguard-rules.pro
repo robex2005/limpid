@@ -1,0 +1,3 @@
+-keep class io.github.robex2005.limpid.helper.HelperMain { *; }
+-dontwarn org.bouncycastle.**
+-dontwarn org.conscrypt.**

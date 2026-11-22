@@ -1,0 +1,1 @@
+First release: global, per-app and off modes; built-in wireless debugging pairing; automatic restart after reboot on Wi-Fi; English and Romanian.

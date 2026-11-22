@@ -1,0 +1,26 @@
+# Submit to https://gitlab.com/fdroid/fdroiddata as metadata/io.github.robex2005.limpid.yml
+Categories:
+  - System
+License: GPL-3.0-or-later
+AuthorName: robex2005
+SourceCode: https://github.com/robex2005/limpid
+IssueTracker: https://github.com/robex2005/limpid/issues
+Changelog: https://github.com/robex2005/limpid/releases
+
+AutoName: Limpid
+
+RepoType: git
+Repo: https://github.com/robex2005/limpid.git
+
+Builds:
+  - versionName: 0.1.0
+    versionCode: 1
+    commit: v0.1.0
+    subdir: app
+    gradle:
+      - yes
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 0.1.0
+CurrentVersionCode: 1

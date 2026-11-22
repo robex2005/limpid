@@ -1,0 +1,1 @@
+Fix gray, washed-out videos on Samsung One UI by disabling HW overlays

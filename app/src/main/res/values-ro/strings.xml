@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="channel_setup">Configurare și asociere</string>
+    <string name="back">Înapoi</string>
+    <string name="cancel">Anulează</string>
+    <string name="lang_system">Limba sistemului</string>
+
+    <string name="status">Stare</string>
+    <string name="mode_off">Dezactivat</string>
+    <string name="mode_global">Activ global</string>
+    <string name="mode_apps">Doar aplicații selectate</string>
+    <string name="adb_ok">Depanare wireless asociată</string>
+    <string name="adb_no">Depanare wireless neconfigurată</string>
+    <string name="helper_ok">Serviciu Limpid pornit</string>
+    <string name="helper_no">Serviciu Limpid oprit</string>
+    <string name="overlays_disabled">Suprapuneri HW dezactivate acum</string>
+    <string name="overlays_normal">Suprapuneri HW normale acum</string>
+    <string name="setup">Configurează depanarea wireless</string>
+    <string name="start_service">Pornește serviciul</string>
+    <string name="connecting">Mă conectez la depanarea wireless…</string>
+    <string name="connect_failed">Serviciul nu a putut porni. Verifică dacă ești pe Wi-Fi.</string>
+    <string name="need_setup">Configurează mai întâi depanarea wireless.</string>
+
+    <string name="g_title">Activare globală</string>
+    <string name="g_desc">Suprapunerile HW rămân dezactivate peste tot până la repornire.</string>
+    <string name="a_title">Doar pentru aplicațiile alese</string>
+    <string name="a_desc">Se activează automat când deschizi o aplicație din listă.</string>
+    <string name="o_title">Dezactivare</string>
+    <string name="o_desc">Revine la comportamentul normal al sistemului.</string>
+    <string name="choose">Alege ›</string>
+    <plurals name="apps_selected">
+        <item quantity="one">%d aplicație selectată</item>
+        <item quantity="few">%d aplicații selectate</item>
+        <item quantity="other">%d de aplicații selectate</item>
+    </plurals>
+    <string name="a11y_off">Serviciul de accesibilitate e oprit, deci Limpid nu vede ce aplicație e deschisă.</string>
+    <string name="a11y_auto">Activează automat</string>
+    <string name="a11y_open">Setări accesibilitate</string>
+    <string name="a11y_description">Limpid citește doar ce aplicație e în prim-plan, ca să activeze fixul video pentru aplicațiile selectate. Nu citește conținutul ecranului și nici ce tastezi.</string>
+
+    <string name="apps_title">Aplicații</string>
+    <string name="search">Caută aplicații…</string>
+    <string name="info_title">Informații</string>
+
+    <string name="pair_title">Asociere depanare wireless</string>
+    <string name="pair_state_idle">Pas unic. Apasă Pornește, apoi deschide Depanare wireless → Asociază dispozitivul cu un cod de asociere.</string>
+    <string name="pair_state_paired">Deja asociat. Asociază din nou doar dacă ai revocat autorizările de depanare.</string>
+    <string name="pair_start">Pornește asocierea</string>
+    <string name="pair_again">Asociază din nou</string>
+    <string name="pair_notif_searching">Aștept dialogul de asociere… Deschide Opțiuni dezvoltator → Depanare wireless → Asociază dispozitivul cu un cod de asociere.</string>
+    <string name="pair_notif_ready">Serviciul de asociere a fost găsit. Introdu codul de 6 cifre aici sau în notificare.</string>
+    <string name="pair_notif_working">Asociez și pornesc serviciul Limpid…</string>
+    <string name="pair_notif_done">Gata. Limpid e asociat și serviciul rulează.</string>
+    <string name="pair_notif_failed">Eșuat: %1$s</string>
+    <string name="pair_err_no_service">Dialogul de asociere nu e deschis.</string>
+    <string name="pair_err_code">Cod greșit sau dialogul a fost închis.</string>
+    <string name="pair_code_hint">Cod de 6 cifre</string>
+    <string name="pair_enter_code">Introdu codul</string>
+    <string name="pair_btn">Asociază</string>
+    <string name="open_dev_options">Deschide Opțiuni dezvoltator</string>
+
+    <string name="how_title">Cum activezi depanarea wireless</string>
+    <string-array name="steps">
+        <item>Setări → Despre telefon → Informații software → apasă de 7 ori pe Număr versiune.</item>
+        <item>Apasă Pornește asocierea de mai sus, apoi Setări → Opțiuni dezvoltator și activează Depanare wireless (e nevoie de Wi-Fi).</item>
+        <item>Atinge Depanare wireless → Asociază dispozitivul cu un cod de asociere.</item>
+        <item>Scrie codul de 6 cifre în notificarea Limpid fără să închizi dialogul (sau folosește ecranul împărțit și scrie-l aici).</item>
+        <item>Gata. Limpid își acordă singur permisiunile necesare și pornește serviciul.</item>
+    </string-array>
+    <string name="note_reboot">După repornire, Limpid reactivează singur depanarea wireless și repornește serviciul imediat ce ești pe Wi-Fi. Odată pornit, merge și pe date mobile până la următoarea repornire.</string>
+
+    <string name="settings_title">Setări</string>
+    <string name="auto_off_title">Oprește depanarea wireless după pornire</string>
+    <string name="auto_off_desc">Mai sigur: serviciul rămâne activ, dar nimic din rețea nu se mai poate conecta la ADB.</string>
+    <string name="battery_btn">Permite rularea în fundal (baterie)</string>
+    <string name="stop_service">Oprește serviciul Limpid</string>
+
+    <string name="why_title">De ce e nevoie de asta?</string>
+    <string name="why_text">Pe unele telefoane Samsung cu One UI, aplicații precum Facebook redau videoclipurile cu un filtru gri, spălăcit, când ecranul e compus de controllerul de afișare (suprapuneri hardware). Imaginea devine corectă imediat ce apare un overlay de sistem, de exemplu panoul de volum. Dezactivarea suprapunerilor HW mută compunerea pe GPU, iar culorile sunt mereu corecte. E același comutator ca Opțiuni dezvoltator → Dezactivare suprapuneri HW, dar aplicat automat.</string>
+    <string name="batt_title">Consum baterie</string>
+    <string name="batt_text">Cu fixul activ, GPU-ul compune fiecare cadru. Pe ecran static diferența e neglijabilă, dar la video și scroll consumul crește puțin. De aceea e recomandat modul „Doar pentru aplicațiile alese”.</string>
+    <string name="restricted_title">Accesibilitatea e gri?</string>
+    <string name="restricted_text">Pe Android 13+, aplicațiile instalate dintr-un APK descărcat au nevoie de: Setări → Aplicații → Limpid → ⋮ → Permite setări restricționate. Sau folosește „Activează automat” din ecranul principal, după asociere.</string>
+</resources>

@@ -1,0 +1,1 @@
+Prima versiune: moduri global, pe aplicații și oprit; asociere integrată cu depanarea wireless; repornire automată după restart pe Wi-Fi; română și engleză.

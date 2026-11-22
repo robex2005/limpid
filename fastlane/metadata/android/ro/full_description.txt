@@ -1,0 +1,14 @@
+Pe unele telefoane Samsung cu One UI, aplicații precum Facebook redau videoclipurile cu un filtru gri, spălăcit. Imaginea devine corectă imediat ce apare un overlay de sistem (de exemplu panoul de volum). Soluția cunoscută este <i>Opțiuni dezvoltator → Dezactivare suprapuneri HW</i>, dar comutatorul se resetează la fiecare repornire și consumă baterie dacă e lăsat activ permanent.
+
+<b>Limpid aplică acest comutator pentru tine:</b>
+<ul>
+<li><b>Activare globală</b> – suprapunerile HW dezactivate peste tot până la repornire.</li>
+<li><b>Doar pentru aplicațiile alese</b> – se activează automat când deschizi o aplicație din listă și se oprește când ieși din ea.</li>
+<li><b>Dezactivare</b> – revine la comportamentul normal al sistemului.</li>
+</ul>
+
+<b>Fără root, fără Shizuku.</b> Limpid se asociază o singură dată cu <i>Depanarea wireless</i> a telefonului (Android 11+), apoi pornește un mic helper care rulează ca utilizator shell și poate face un singur lucru: comutarea acelui flag de depanare din SurfaceFlinger. Helper-ul merge și pe date mobile până la repornire. După repornire, Limpid îl pornește automat imediat ce ești pe Wi-Fi.
+
+<b>Confidențialitate:</b> fără acces la internet în afara dispozitivului, fără analiză, fără reclame. Serviciul de accesibilitate e folosit doar ca să afle ce aplicație e în prim-plan (pentru modul pe aplicații); nu citește conținutul ecranului.
+
+Disponibil în română și engleză.

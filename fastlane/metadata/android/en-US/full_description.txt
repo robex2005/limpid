@@ -1,0 +1,14 @@
+On some Samsung phones running One UI, apps like Facebook play videos with a gray, washed-out haze. The picture becomes correct the moment any system overlay appears (for example the volume panel). The known workaround is <i>Developer options → Disable HW overlays</i>, but that switch resets on every reboot and costs battery when left on all the time.
+
+<b>Limpid applies that switch for you:</b>
+<ul>
+<li><b>Enable globally</b> – HW overlays disabled everywhere until reboot.</li>
+<li><b>Only for selected apps</b> – turns on automatically when you open an app from your list, and off when you leave it.</li>
+<li><b>Disable</b> – back to normal system behavior.</li>
+</ul>
+
+<b>No root, no Shizuku.</b> Limpid pairs once with your phone's own <i>Wireless debugging</i> (Android 11+), then starts a tiny helper that runs as the shell user and can do exactly one thing: toggle that SurfaceFlinger debug flag. The helper keeps running on mobile data until reboot. After a reboot Limpid restarts it automatically as soon as you are on Wi-Fi.
+
+<b>Privacy:</b> no internet access beyond the device itself, no analytics, no ads. The accessibility service is used only to know which app is in the foreground (for the per-app mode); it never reads screen content.
+
+Available in English and Romanian.
