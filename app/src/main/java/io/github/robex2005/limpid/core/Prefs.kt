@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import java.security.SecureRandom
 
 enum class Mode { OFF, GLOBAL, APPS }
+enum class Backend { ADB, SHIZUKU }
 
 class Prefs(context: Context) {
     private val sp = context.getSharedPreferences("limpid", Context.MODE_PRIVATE)
@@ -20,6 +21,16 @@ class Prefs(context: Context) {
 
     private val _paired = MutableStateFlow(sp.getBoolean(K_PAIRED, false))
     val paired: StateFlow<Boolean> = _paired
+
+    private val _backend = MutableStateFlow(
+        runCatching { Backend.valueOf(sp.getString(K_BACKEND, Backend.ADB.name)!!) }.getOrDefault(Backend.ADB)
+    )
+    val backend: StateFlow<Backend> = _backend
+
+    fun setBackend(b: Backend) {
+        _backend.value = b
+        sp.edit().putString(K_BACKEND, b.name).apply()
+    }
 
     private val _autoDisableWifiDebug = MutableStateFlow(sp.getBoolean(K_AUTO_OFF, true))
     val autoDisableWifiDebug: StateFlow<Boolean> = _autoDisableWifiDebug
@@ -58,6 +69,7 @@ class Prefs(context: Context) {
         const val K_PAIRED = "paired"
         const val K_AUTO_OFF = "auto_disable_wifi_debug"
         const val K_TOKEN = "token"
+        const val K_BACKEND = "backend"
         const val K_PORT = "port"
         const val DEFAULT_PORT = 47391
     }

@@ -25,6 +25,7 @@ On some Samsung phones running One UI, apps like Facebook play videos with a gra
 4. An **accessibility service** reports the focused application window (event-driven, no polling, ignores system overlays) for the per-app mode.
 5. After a **reboot**, Limpid re-enables wireless debugging through `WRITE_SECURE_SETTINGS`, reconnects with the already-paired key as soon as the phone is on Wi-Fi, and restarts the helper. Once running, it works on mobile data until the next reboot.
 6. Optionally (default on) it turns wireless debugging off again once the helper is running.
+7. **Shizuku fallback:** if built-in pairing does not work on a given phone, Limpid can start the same helper through [Shizuku](https://shizuku.rikka.app/) instead.
 
 ## Install
 
@@ -59,4 +60,5 @@ GPL-3.0-or-later
 - Un helper minim rulează ca `shell` și poate face un singur lucru: comutarea flag-ului din SurfaceFlinger. Merge și pe date mobile, până la repornire.
 - După repornire, Limpid repornește singur depanarea wireless și helper-ul imediat ce telefonul e pe Wi-Fi.
 - Modul pe aplicații folosește un serviciu de accesibilitate care citește doar numele aplicației din prim-plan.
+- Alternativ, dacă asocierea integrată nu merge, helper-ul poate fi pornit prin Shizuku.
 - Interfață în română și engleză.

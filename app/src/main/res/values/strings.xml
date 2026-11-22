@@ -85,4 +85,13 @@
     <string name="connect_port_label">Connect port (optional)</string>
     <string name="pair_split_hint">Samsung closes the pairing dialog when you switch apps: type the code in the notification, or use split screen. If the port is not detected, copy it from the dialog (IP address and port), e.g. 42965. The connect port is on the Wireless debugging screen.</string>
     <string name="pair_code_hint">Code (or port + code)</string>
+    <string name="shizuku_title">Alternative: Shizuku</string>
+    <string name="shizuku_not_running">If built-in pairing does not work on your phone, install and start Shizuku, then come back here.</string>
+    <string name="shizuku_no_permission">Shizuku is running. Tap the button and allow Limpid.</string>
+    <string name="shizuku_ready">Shizuku is running and Limpid has permission.</string>
+    <string name="shizuku_active">Limpid uses Shizuku to start its service. After a reboot, Shizuku must be running (it can start itself on Wi-Fi).</string>
+    <string name="shizuku_use">Use Shizuku</string>
+    <string name="shizuku_back_to_adb">Switch back to built-in pairing</string>
+    <string name="shizuku_done">Done. Service started through Shizuku.</string>
+    <string name="via_shizuku">Connected through Shizuku</string>
 </resources>

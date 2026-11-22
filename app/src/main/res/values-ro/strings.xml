@@ -85,4 +85,13 @@
     <string name="connect_port_label">Port conectare (opțional)</string>
     <string name="pair_split_hint">Samsung închide dialogul de asociere când schimbi aplicația: scrie codul în notificare sau folosește ecranul împărțit. Dacă portul nu e detectat, copiază-l din dialog (Adresa IP și portul), ex. 42965. Portul de conectare e pe ecranul Depanare wireless.</string>
     <string name="pair_code_hint">Cod (sau port + cod)</string>
+    <string name="shizuku_title">Alternativ: Shizuku</string>
+    <string name="shizuku_not_running">Dacă asocierea integrată nu merge pe telefonul tău, instalează și pornește Shizuku, apoi revino aici.</string>
+    <string name="shizuku_no_permission">Shizuku rulează. Apasă butonul și permite accesul pentru Limpid.</string>
+    <string name="shizuku_ready">Shizuku rulează și Limpid are permisiune.</string>
+    <string name="shizuku_active">Limpid folosește Shizuku ca să pornească serviciul. După repornire, Shizuku trebuie să ruleze (poate porni singur pe Wi-Fi).</string>
+    <string name="shizuku_use">Folosește Shizuku</string>
+    <string name="shizuku_back_to_adb">Revino la asocierea integrată</string>
+    <string name="shizuku_done">Gata. Serviciul a pornit prin Shizuku.</string>
+    <string name="via_shizuku">Conectat prin Shizuku</string>
 </resources>

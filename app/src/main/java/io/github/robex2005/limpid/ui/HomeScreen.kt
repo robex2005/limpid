@@ -55,6 +55,7 @@ fun HomeScreen(onOpen: (Screen) -> Unit, showSnack: (String) -> Unit) {
     val mode by prefs.mode.collectAsStateWithLifecycle()
     val apps by prefs.apps.collectAsStateWithLifecycle()
     val paired by prefs.paired.collectAsStateWithLifecycle()
+    val backend by prefs.backend.collectAsStateWithLifecycle()
     val helperUp by Controller.helperUp.collectAsStateWithLifecycle()
     val disabled by Controller.overlaysDisabled.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
@@ -100,7 +101,13 @@ fun HomeScreen(onOpen: (Screen) -> Unit, showSnack: (String) -> Unit) {
                     style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(vertical = 4.dp)
                 )
-                StatusRow(paired, stringResource(if (paired) R.string.adb_ok else R.string.adb_no))
+                StatusRow(paired, stringResource(
+                    when {
+                        !paired -> R.string.adb_no
+                        backend == io.github.robex2005.limpid.core.Backend.SHIZUKU -> R.string.via_shizuku
+                        else -> R.string.adb_ok
+                    }
+                ))
                 StatusRow(helperUp, stringResource(if (helperUp) R.string.helper_ok else R.string.helper_no))
                 if (helperUp && disabled != null) {
                     StatusRow(disabled == true, stringResource(if (disabled == true) R.string.overlays_disabled else R.string.overlays_normal), neutral = disabled != true)

@@ -52,6 +52,12 @@ import io.github.robex2005.limpid.LimpidApp
 import io.github.robex2005.limpid.R
 import io.github.robex2005.limpid.adb.Bootstrapper
 import io.github.robex2005.limpid.adb.PairingService
+import io.github.robex2005.limpid.adb.ShizukuBackend
+import io.github.robex2005.limpid.core.Backend
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.delay
+import rikka.shizuku.Shizuku
 import io.github.robex2005.limpid.adb.PairingStatus
 import io.github.robex2005.limpid.core.Controller
 import kotlinx.coroutines.launch
@@ -152,6 +158,8 @@ fun InfoScreen(showSnack: (String) -> Unit) {
             }
         }
 
+        ShizukuCard(showSnack)
+
         Section(stringResource(R.string.how_title)) {
             stringArrayResource(R.array.steps).forEachIndexed { i, step ->
                 Row(Modifier.padding(vertical = 6.dp)) {
@@ -218,3 +226,61 @@ private fun Section(title: String, content: @Composable () -> Unit) {
 
 @Composable
 private fun Body(text: String) = Text(text, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+@Composable
+private fun ShizukuCard(showSnack: (String) -> Unit) {
+    val ctx = LocalContext.current
+    val prefs = LimpidApp.prefs
+    val backend by prefs.backend.collectAsStateWithLifecycle()
+    var state by remember { mutableStateOf(ShizukuBackend.state()) }
+    var busy by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val msgOk = stringResource(R.string.shizuku_done)
+    val msgFail = stringResource(R.string.connect_failed)
+
+    fun bootstrap() {
+        busy = true
+        prefs.setBackend(Backend.SHIZUKU)
+        scope.launch {
+            val r = io.github.robex2005.limpid.adb.Bootstrapper.run(ctx)
+            busy = false
+            showSnack(if (r.isSuccess) msgOk else msgFail + " " + (r.exceptionOrNull()?.message ?: ""))
+        }
+    }
+
+    LaunchedEffect(Unit) { while (true) { state = ShizukuBackend.state(); delay(1500) } }
+    DisposableEffect(Unit) {
+        val l = Shizuku.OnRequestPermissionResultListener { code, result ->
+            if (code == ShizukuBackend.REQUEST_CODE && result == PackageManager.PERMISSION_GRANTED) bootstrap()
+        }
+        runCatching { Shizuku.addRequestPermissionResultListener(l) }
+        onDispose { runCatching { Shizuku.removeRequestPermissionResultListener(l) } }
+    }
+
+    Card(shape = RoundedCornerShape(20.dp), colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceContainer)) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(stringResource(R.string.shizuku_title), style = MaterialTheme.typography.titleMedium)
+            Text(
+                stringResource(
+                    when (state) {
+                        ShizukuBackend.State.NOT_RUNNING -> R.string.shizuku_not_running
+                        ShizukuBackend.State.NO_PERMISSION -> R.string.shizuku_no_permission
+                        ShizukuBackend.State.READY -> if (backend == Backend.SHIZUKU) R.string.shizuku_active else R.string.shizuku_ready
+                    }
+                ),
+                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            if (state != ShizukuBackend.State.NOT_RUNNING && backend != Backend.SHIZUKU) {
+                Button(
+                    onClick = { if (state == ShizukuBackend.State.READY) bootstrap() else ShizukuBackend.requestPermission() },
+                    enabled = !busy, modifier = Modifier.fillMaxWidth()
+                ) { Text(stringResource(R.string.shizuku_use)) }
+            }
+            if (backend == Backend.SHIZUKU) {
+                OutlinedButton(onClick = { prefs.setBackend(Backend.ADB) }, Modifier.fillMaxWidth()) {
+                    Text(stringResource(R.string.shizuku_back_to_adb))
+                }
+            }
+        }
+    }
+}
