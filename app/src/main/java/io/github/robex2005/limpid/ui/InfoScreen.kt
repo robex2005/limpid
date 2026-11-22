@@ -27,6 +27,19 @@ import androidx.compose.ui.unit.dp
 import io.github.robex2005.limpid.BuildConfig
 import io.github.robex2005.limpid.R
 import io.github.robex2005.limpid.backend.ShizukuControl
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.Button
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontFamily
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun InfoScreen() {
@@ -64,6 +77,8 @@ fun InfoScreen() {
                 color = MaterialTheme.colorScheme.onTertiaryContainer, style = MaterialTheme.typography.bodyMedium)
         }
 
+        DiagnosticSection()
+
         Section(stringResource(R.string.why_title)) { Body(stringResource(R.string.why_text)) }
         Section(stringResource(R.string.batt_title)) { Body(stringResource(R.string.batt_text)) }
         Section(stringResource(R.string.restricted_title)) { Body(stringResource(R.string.restricted_text)) }
@@ -85,3 +100,45 @@ private fun Section(title: String, content: @Composable () -> Unit) {
 
 @Composable
 private fun Body(text: String) = Text(text, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+private const val DIAG_SCRIPT = """
+echo '== build'; getprop ro.build.display.id; getprop ro.build.version.sdk
+echo '== sf 1010'; service call SurfaceFlinger 1010
+echo '== settings'; for n in global secure system; do settings list ${'$'}n | grep -iE 'overlay|hwc|hw_|gpu|composit' | sed "s/^/${'$'}n: /"; done
+echo '== props'; getprop | grep -iE 'hwc|overlay|composit|debug\.sf|vendor\.sf|persist\.sys\.sf|sf\.debug'
+echo '== dumpsys'; dumpsys SurfaceFlinger | grep -iE 'disable.?hwc|debug.?disable|devopt|force.?client|hwc.?disabled|client composition' | head -n 30
+"""
+
+@Composable
+private fun DiagnosticSection() {
+    var out by remember { mutableStateOf<String?>(null) }
+    var busy by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val clipboard = LocalClipboardManager.current
+    Section(stringResource(R.string.diag_title)) {
+        Body(stringResource(R.string.diag_text))
+        Row(Modifier.padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(enabled = !busy, onClick = {
+                busy = true
+                scope.launch {
+                    out = withContext(Dispatchers.IO) {
+                        runCatching { ShizukuControl.exec("sh", "-c", DIAG_SCRIPT) }
+                            .getOrElse { "error: ${it.cause?.message ?: it.message}" }
+                    }
+                    busy = false
+                }
+            }) { Text(stringResource(R.string.diag_run)) }
+            out?.let { text ->
+                OutlinedButton(onClick = { clipboard.setText(AnnotatedString(text)) }) { Text(stringResource(R.string.diag_copy)) }
+            }
+        }
+        out?.let {
+            Card(Modifier.padding(top = 8.dp), colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceContainerHigh)) {
+                SelectionContainer {
+                    Text(it, Modifier.padding(10.dp), fontFamily = FontFamily.Monospace,
+                        style = MaterialTheme.typography.labelSmall)
+                }
+            }
+        }
+    }
+}

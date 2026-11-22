@@ -58,4 +58,8 @@
     <string name="restricted_title">Accessibility is greyed out?</string>
     <string name="restricted_text">On Android 13+, apps installed from a downloaded APK need: Settings → Apps → Limpid → ⋮ → Allow restricted settings. Or use “Enable automatically” on the main screen once Shizuku is ready.</string>
     <string name="overlays_unknown">HW overlays state unknown</string>
+    <string name="diag_title">Diagnostics</string>
+    <string name="diag_text">Run it once with Developer options → Disable HW overlays OFF, then once with it ON, and send both results. This shows how One UI implements the switch.</string>
+    <string name="diag_run">Run diagnostics</string>
+    <string name="diag_copy">Copy</string>
 </resources>

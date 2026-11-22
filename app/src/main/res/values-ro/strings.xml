@@ -58,4 +58,8 @@
     <string name="restricted_title">Accesibilitatea e gri?</string>
     <string name="restricted_text">Pe Android 13+, aplicațiile instalate dintr-un APK descărcat au nevoie de: Setări → Aplicații → Limpid → ⋮ → Permite setări restricționate. Sau folosește „Activează automat” din ecranul principal, după ce Shizuku e pregătit.</string>
     <string name="overlays_unknown">Starea suprapunerilor HW necunoscută</string>
+    <string name="diag_title">Diagnostic</string>
+    <string name="diag_text">Rulează o dată cu Opțiuni dezvoltator → Dezactivare suprapuneri HW OPRIT, apoi o dată cu el PORNIT, și trimite ambele rezultate. Așa se vede cum implementează One UI comutatorul.</string>
+    <string name="diag_run">Rulează diagnosticul</string>
+    <string name="diag_copy">Copiază</string>
 </resources>
